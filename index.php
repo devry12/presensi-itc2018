@@ -1,15 +1,30 @@
-<?php 
+<?php
 require_once "layout/header.php";
-
-$count_office = select_data_office();
-$count_db = select_data_db();
-$count_data = select_data_data();
-$count_digital = select_data_digital();
+// count day 1
+$countday = array();
+$countoffice   = array();
+$countdb       = array();
+$countdata     = array();
+$countdigital  = array();
+for ($i=1; $i <=10 ; $i++) {
+  // code...
+$count_office = select_data_office($i);
+$count_db = select_data_db($i);
+$count_data = select_data_data($i);
+$count_digital = select_data_digital($i);
 
 $office = mysqli_num_rows($count_office);
 $db = mysqli_num_rows($count_db);
 $data = mysqli_num_rows($count_data);
 $digital = mysqli_num_rows($count_digital);
+$count = $office + $db + $data + $digital;
+
+array_push($countday,$count);
+array_push($countoffice,$office);
+array_push($countdb,$db);
+array_push($countdata,$data);
+array_push($countdigital,$digital);
+}
 ?>
 
 <div class="row">
@@ -29,9 +44,13 @@ $digital = mysqli_num_rows($count_digital);
         </div>
     </div>
 </div>
-
 <br>
-
+<div class="container ">
+<div class="card card-body">
+<canvas id="totaldata" ></canvas>
+</div>
+</div>
+<br>
 <div class="container">
 <input type="text" id="office-count" value="<?=$office?>" hidden>
 <input type="text" id="db-count" value="<?=$db?>" hidden>
@@ -40,7 +59,7 @@ $digital = mysqli_num_rows($count_digital);
 <div class="card card-body">
 <canvas id="presensi-chart" ></canvas>
 </div>
-    
+
 </div>
 
 
@@ -54,6 +73,7 @@ $digital = mysqli_num_rows($count_digital);
 <script src="assets/mdb/js/popper.min.js"></script>
 <script src="https://unpkg.com/ionicons@4.1.1/dist/ionicons.js"></script>
 
+
 <script type="text/javascript">
     $(document).ready(function () {
         $('#sidebarCollapse').on('click', function () {
@@ -63,7 +83,7 @@ $digital = mysqli_num_rows($count_digital);
     });
 </script>
 
-<script>
+<!-- <script>
 
     var office = $("#office-count").val()
     var db = $("#db-count").val()
@@ -76,7 +96,7 @@ $digital = mysqli_num_rows($count_digital);
         data: {
             labels: ["Office Administration", "Database Management", "Data Scientist", "Digital Interactive Media"],
             datasets: [{
-                label: 'Total Presensi',
+                label: "Total Presensi Hari ke <?=$_SESSION['hari']?>",
                 data: [office, db, data, digital],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -103,6 +123,107 @@ $digital = mysqli_num_rows($count_digital);
             }
         }
     });
+</script> -->
+
+<script type="text/javascript">
+
+var total = document.getElementById('totaldata')
+var myLineChart = new Chart(total, {
+type: 'line',
+data: {
+    labels: ['6 Agustus (1)', '7 Agustus (2)', '8Agustus (3)', '9 Agustus (4)', '11 Agustus (5)', '27 Agustus (6)', '16 Agustus (7)', '18 Agustus (8)', '30 Agustus (9)', '10 September (10)'],
+    datasets: [{
+        label: "Total Presensi",
+        data: [<?=$countday[0]?>,<?=$countday[1]?>, <?=$countday[2]?>, <?=$countday[3]?>, <?=$countday[4]?>, <?=$countday[5]?>, <?=$countday[6]?>, <?=$countday[7]?>,<?=$countday[8]?>, <?=$countday[9]?>],
+        backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+        borderColor:['rgba(54, 162, 235, 1)'],
+        borderWidth: 1,
+
+    }]
+},
+options: {
+  responsive: true,
+  maintainAspectRatio: false,
+    title: {
+        display: true,
+        text: 'Total Peserta'
+    },
+    scales: {
+        yAxes: [{
+            ticks: {
+                fixedStepSize: 1
+            }
+        }],
+    },
+    legend: {
+        display: true,
+        labels: {
+            fontColor: 'rgb(60, 183, 200)'
+        }
+    }
+}
+});
 </script>
+<script type="text/javascript">
+
+var total = document.getElementById('presensi-chart')
+var myLineChart = new Chart(total, {
+type: 'bar',
+data: {
+    labels: ['6 Agustus (1)', '7 Agustus (2)', '8Agustus (3)', '9 Agustus (4)', '11 Agustus (5)', '27 Agustus (6)', '16 Agustus (7)', '18 Agustus (8)', '30 Agustus (9)', '10 September (10)'],
+    datasets: [{
+        label: "Office Administration",
+        data: [<?=$countoffice[0]?>,<?=$countoffice[1]?>,<?=$countoffice[2]?>,<?=$countoffice[3]?>,<?=$countoffice[4]?>,<?=$countoffice[5]?>,<?=$countoffice[6]?>,<?=$countoffice[7]?>,<?=$countoffice[8]?>,<?=$countoffice[9]?>,],
+        backgroundColor: ['rgba(54, 162, 235, 0.2)','rgba(54, 162, 235, 0.2)','rgba(54, 162, 235, 0.2)','rgba(54, 162, 235, 0.2)','rgba(54, 162, 235, 0.2)','rgba(54, 162, 235, 0.2)','rgba(54, 162, 235, 0.2)','rgba(54, 162, 235, 0.2)','rgba(54, 162, 235, 0.2)','rgba(54, 162, 235, 0.2)'],
+        borderColor:['rgba(54, 162, 235, 1)','rgba(54, 162, 235, 1)','rgba(54, 162, 235, 1)','rgba(54, 162, 235, 1)','rgba(54, 162, 235, 1)','rgba(54, 162, 235, 1)','rgba(54, 162, 235, 1)','rgba(54, 162, 235, 1)','rgba(54, 162, 235, 1)','rgba(54, 162, 235, 1)'],
+        borderWidth: 1,
+
+    },{
+        label: "Database Management",
+        data: [<?=$countdb[0]?>,<?=$countdb[1]?>, <?=$countdb[2]?>, <?=$countdb[3]?>, <?=$countdb[4]?>, <?=$countdb[5]?>, <?=$countdb[6]?>, <?=$countdb[7]?>,<?=$countdb[8]?>, <?=$countdb[9]?>],
+        backgroundColor: ['rgba(255, 99, 132, 0.2)','rgba(255, 99, 132, 0.2)','rgba(255, 99, 132, 0.2)','rgba(255, 99, 132, 0.2)','rgba(255, 99, 132, 0.2)','rgba(255, 99, 132, 0.2)','rgba(255, 99, 132, 0.2)','rgba(255, 99, 132, 0.2)','rgba(255, 99, 132, 0.2)','rgba(255, 99, 132, 0.2)',],
+        borderColor:['rgba(255,99,132,1)','rgba(255,99,132,1)','rgba(255,99,132,1)','rgba(255,99,132,1)','rgba(255,99,132,1)','rgba(255,99,132,1)','rgba(255,99,132,1)','rgba(255,99,132,1)','rgba(255,99,132,1)','rgba(255,99,132,1)','rgba(255,99,132,1)',],
+        borderWidth: 1,
+
+    },{
+        label: "Digital Interactive Media",
+        data: [<?=$countdigital[0]?>,<?=$countdigital[1]?>, <?=$countdigital[2]?>, <?=$countdigital[3]?>, <?=$countdigital[4]?>, <?=$countdigital[5]?>, <?=$countdigital[6]?>, <?=$countdigital[7]?>,<?=$countdigital[8]?>, <?=$countdigital[9]?>],
+        backgroundColor: ['rgba(255, 206, 86, 0.2)','rgba(255, 206, 86, 0.2)','rgba(255, 206, 86, 0.2)','rgba(255, 206, 86, 0.2)','rgba(255, 206, 86, 0.2)','rgba(255, 206, 86, 0.2)','rgba(255, 206, 86, 0.2)','rgba(255, 206, 86, 0.2)','rgba(255, 206, 86, 0.2)','rgba(255, 206, 86, 0.2)',],
+        borderColor:['rgba(255, 206, 86, 1)','rgba(255, 206, 86, 1)','rgba(255, 206, 86, 1)','rgba(255, 206, 86, 1)','rgba(255, 206, 86, 1)','rgba(255, 206, 86, 1)','rgba(255, 206, 86, 1)','rgba(255, 206, 86, 1)','rgba(255, 206, 86, 1)','rgba(255, 206, 86, 1)',],
+        borderWidth: 1,
+
+    },{
+        label: "Data Scientist",
+        data: [<?=$countdata[0]?>,<?=$countdata[1]?>, <?=$countdata[2]?>, <?=$countdata[3]?>, <?=$countdata[4]?>, <?=$countdata[5]?>, <?=$countdata[6]?>, <?=$countdata[7]?>,<?=$countdata[8]?>, <?=$countdata[9]?>],
+        backgroundColor: ['rgba(170, 72, 230, 0.2)','rgba(170, 72, 230, 0.2)','rgba(170, 72, 230, 0.2)','rgba(170, 72, 230, 0.2)','rgba(170, 72, 230, 0.2)','rgba(170, 72, 230, 0.2)','rgba(170, 72, 230, 0.2)','rgba(170, 72, 230, 0.2)','rgba(170, 72, 230, 0.2)','rgba(170, 72, 230, 0.2)',],
+        borderColor:['rgba(170, 72, 230, 1)','rgba(170, 72, 230, 1)','rgba(170, 72, 230, 1)','rgba(170, 72, 230, 1)','rgba(170, 72, 230, 1)','rgba(170, 72, 230, 1)','rgba(170, 72, 230, 1)','rgba(170, 72, 230, 1)','rgba(170, 72, 230, 1)','rgba(170, 72, 230, 1)',],
+        borderWidth: 1,
+
+    }]
+},
+options: {
+  responsive: true,
+  maintainAspectRatio: false,
+    title: {
+        display: true,
+        text: 'Total Peserta'
+    },
+    scales: {
+        yAxes: [{
+            ticks: {
+                fixedStepSize: 1
+            }
+        }],
+    },
+    legend: {
+        display: true,
+        labels: {
+            fontColor: 'rgb(60, 183, 200)'
+        }
+    }
+}
+});
+</script>
+
 
 </html>

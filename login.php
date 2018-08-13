@@ -1,7 +1,10 @@
 
-<?php 
+<?php
 require_once "core/init.php";
 
+if (isset($_SESSION['user'])) {
+  header('location:index.php');
+}
 
 ?>
 
@@ -19,7 +22,7 @@ require_once "core/init.php";
     <link rel="stylesheet" href="assets/mdb/css/mdb.css">
     <link rel="stylesheet" href="assets/mdb/css/style.css">
     <link href="https://unpkg.com/ionicons@4.1.1/dist/css/ionicons.min.css" rel="stylesheet">
-    
+
 </head>
 
 <body>
@@ -33,7 +36,7 @@ require_once "core/init.php";
     <div class="col-sm-6">
         <div class="card">
             <div class="card-body">
-                
+
 <!-- Default form login -->
 <form action="" method="post">
     <p class="h4 text-center mb-4">Sign in</p>
@@ -48,12 +51,27 @@ require_once "core/init.php";
     <label for="defaultFormLoginPasswordEx" class="grey-text">password</label>
     <input type="password" id="defaultFormLoginPasswordEx" name="pass" class="form-control">
 
+<br>
+    <select class="form-control" name="hari">
+        <option value="0" style="display:none">Silahkan pilih hari</option>
+        <option value="1">Hari Ke 1</option>
+        <option value="2">Hari Ke 2</option>
+        <option value="3">Hari Ke 3</option>
+        <option value="4">Hari Ke 4</option>
+        <option value="5">Hari Ke 5</option>
+        <option value="6">Hari Ke 6</option>
+        <option value="7">Hari Ke 7</option>
+        <option value="8">Hari Ke 8</option>
+        <option value="9">Hari Ke 9</option>
+        <option value="10">Hari Ke 10</option>
+    </select>
+
     <div class="text-center mt-4">
         <button class="btn btn-indigo" type="submit" name="login">Login</button>
     </div>
 </form>
 <!-- Default form login -->
-                      
+
             </div>
         </div>
     </div>
@@ -75,16 +93,24 @@ require_once "core/init.php";
 if (isset($_POST['login'])) {
     $username   = $_POST['username'];
     $pass       = $_POST['pass'];
+    $hari       = $_POST['hari'];
 
     if (!empty($username) && !empty($pass)) {
+      if ($hari != 0) {
         if (login_admin($username,$pass)) {
            $_SESSION['user'] = $username;
+           $_SESSION['hari'] = $hari;
            header('location:index.php');
         }else{
             echo '<script language="javascript">';
             echo 'swal("Oops!", "Username atau Password Salah", "error");';
             echo '</script>';
         }
+      }else {
+        echo '<script language="javascript">';
+        echo 'swal("Oops!", "Silahkan pilih hari dulu", "error");';
+        echo '</script>';
+      }
     }else{
         echo '<script language="javascript">';
         echo 'swal("Oops!", "Username dan Password harus diisi", "error");';

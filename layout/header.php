@@ -1,12 +1,11 @@
-<?php 
-require_once "core/init.php";
-?>
 
-
-<?php 
+<?php
 require_once "core/init.php";
 
 
+if (!isset($_SESSION['user'])) {
+  header('location:login.php');
+}
 ?>
 
 
@@ -23,7 +22,8 @@ require_once "core/init.php";
     <link rel="stylesheet" href="assets/mdb/css/mdb.css">
     <link rel="stylesheet" href="assets/mdb/css/style.css">
     <link href="https://unpkg.com/ionicons@4.1.1/dist/css/ionicons.min.css" rel="stylesheet">
-    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css">
+
 </head>
 
 <body>
@@ -43,10 +43,9 @@ require_once "core/init.php";
                     <a href="index.php">Dashboard</a>
                 </li>
                 <li>
-                    <a href="#presensi" data-toggle="collapse" aria-expanded="false">Presensi Divisi</a>
+                    <a href="#presensi" data-toggle="collapse" aria-expanded="false">Presensi Divisi <ion-icon name="arrow-dropdown"></ion-icon></a>
                     <ul class="collapse list-unstyled" id="presensi">
                         <li>
-
                             <a href="presensi-office.php">
                                 <ion-icon name="clipboard"></ion-icon> Office Administration</a>
                         </li>
@@ -65,17 +64,40 @@ require_once "core/init.php";
                     </ul>
                 </li>
 
-                              <li>
-                    <a href="#export" data-toggle="collapse" aria-expanded="false">Export Presensi</a>
+                <li>
+                    <a href="#export" data-toggle="collapse" aria-expanded="false">Export Presensi <ion-icon name="arrow-dropdown"></ion-icon></a>
                     <ul class="collapse list-unstyled" id="export">
                         <li>
 
-                            <a href="#">
+                            <a href="e-office.php">
                                 <ion-icon name="clipboard"></ion-icon> Office Administration</a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="e-db.php">
                                 <ion-icon name="filing"></ion-icon> Database Management</a>
+                        </li>
+                        <li>
+                            <a href="e-data.php">
+                                <ion-icon name="filing"></ion-icon> Data Scientist</a>
+                        </li>
+                        <li>
+                            <a href="e-digital.php">
+                                <ion-icon name="play-circle"></ion-icon> Digital Interactive Media</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#email" data-toggle="collapse" aria-expanded="false">Email</a>
+                    <ul class="collapse list-unstyled" id="email">
+                        <li>
+
+                            <a href="#">
+                                <ion-icon name="clipboard"></ion-icon>Send Email</a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <ion-icon name="filing"></ion-icon> Setting</a>
                         </li>
                         <li>
                             <a href="#">
@@ -86,6 +108,9 @@ require_once "core/init.php";
                                 <ion-icon name="play-circle"></ion-icon> Digital Interactive Media</a>
                         </li>
                     </ul>
+                </li>
+                <li>
+                    <a href="logout.php">Logout</a>
                 </li>
 
             </ul>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once "core/init.php";
 
 
@@ -6,8 +6,8 @@ require_once "core/init.php";
 
     // Design initial table header
     $data = '<table class="table table-bordered table-striped">';
-
-    $select = select_data_data();
+      $hari =  $_SESSION['hari'];
+    $select = select_data_data($hari);
 
     // if query results contains rows then featch those rows
     if(mysqli_num_rows($select) > 0)
@@ -20,7 +20,8 @@ require_once "core/init.php";
                 <td>'.$row['name'].'</td>
                 <td>'.$row['phone'].'</td>
                 <td>'.$row['email'].'</td>
-                <td>'.$row['nim'].'</td>';
+                <td>'.$row['nim'].'</td>
+                <td><a href="delete-data.php?tlp_db='.$row['phone'].'" class="btn btn-sm btn-danger">Delete</a></td>';
             $number++;
         }
     }

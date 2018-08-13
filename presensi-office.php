@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once "layout/header.php"
 
 ?>
@@ -9,11 +9,13 @@ require_once "layout/header.php"
 
         <div class="card">
             <div class="card-body">
-        
+
                 <!--Table-->
                 <table class="table table-hover table-responsive-md table-fixed">
-        
+
                     <!--Table head-->
+                    <thead>
+
                         <tr>
                             <th>#</th>
                             <th>Name</th>
@@ -21,18 +23,19 @@ require_once "layout/header.php"
                             <th>Email</th>
                             <th>Nim</th>
                         </tr>
+                      </thead>
 
                     <!--Table head-->
-        
+
                     <!--Table body-->
                     <tbody id="hasilpresensi">
-                        
+
                     </tbody>
                     <!--Table body-->
-        
+
                 </table>
                 <!--Table-->
-        
+
             </div>
         </div>
 
@@ -40,14 +43,8 @@ require_once "layout/header.php"
 
 </body>
 
-<script src="assets/mdb/js/jquery-3.2.1.min.js"></script>
-<script src="core/qcode-decoder.min.js"></script>
-<script src="sound/sound.js"></script>
-<script src="assets/mdb/js/bootstrap.js"></script>
-<script src="assets/mdb/js/mdb.js"></script>
-<script src="assets/mdb/js/popper.min.js"></script>
-<script src="https://unpkg.com/ionicons@4.1.1/dist/ionicons.js"></script>
-<script src="assets/csjs/jquery.toaster.js"></script>
+<?php require_once 'layout/footer.php'; ?>
+
 
         <script type="text/javascript">
             $(document).ready(function () {
@@ -65,7 +62,7 @@ require_once "layout/header.php"
         var video =
             document.getElementById('camera');
             var audio = new Audio('sound/scan.mp3');
-        
+
 
         QCodeDecoder()
             .decodeFromCamera(video, function (er, res) {
@@ -84,67 +81,80 @@ require_once "layout/header.php"
                                 $.toaster({
 
                                     // toast message
-                                    message : 'Presensi Berhasil', 
+                                    message : 'Presensi Berhasil',
 
                                     // toast title
-                                    title : 'Status', 
+                                    title : 'Status',
 
                                     // or 'success', 'info', 'warning', 'danger'
                                     priority : 'success'
-                                    
+
                                     });
                             }else if ($.trim(data) == "salah") {
                                     $.toaster({
 
                                     // toast message
-                                    message : 'Divisi Salah', 
+                                    message : 'Divisi Salah',
 
                                     // toast title
-                                    title : 'Status', 
+                                    title : 'Status',
 
                                     // or 'success', 'info', 'warning', 'danger'
                                     priority : 'warning'
-                                    
+
                                     });
                             } else if ($.trim(data) == "sudah") {
                                                               $.toaster({
 
                                     // toast message
-                                    message : 'Sudah Presensi', 
+                                    message : 'Sudah Presensi',
 
                                     // toast title
-                                    title : 'Status', 
+                                    title : 'Status',
 
                                     // or 'success', 'info', 'warning', 'danger'
                                     priority : 'info'
-                                    
+
+                                    });
+                            }else if ($.trim(data) == "bukan") {
+                                                              $.toaster({
+
+                                    // toast message
+                                    message : 'Anda salah gelombang, ini untuk gelombang <?=$_SESSION['hari']?> ',
+
+                                    // toast title
+                                    title : 'Status',
+
+                                    // or 'success', 'info', 'warning', 'danger'
+                                    priority : 'warning'
+
                                     });
                             }else {
-                            
+
                                 $.toaster({
 
                                     // toast message
-                                    message : 'Presensi Gagal', 
+                                    message : 'Presensi Gagal, Ada masalah System, harap hubungi pengurus',
 
                                     // toast title
-                                    title : 'Status', 
+                                    title : 'Status',
 
                                     // or 'success', 'info', 'warning', 'danger'
                                     priority : 'danger'
-                                    
+
                                     });
                             }
                         }
                      })
                 }
-                
+
             });
         });
 
-    
+
 
 $( ".add" ).click(function() {
-     var data = $('.inputan').serialize();          
+     var data = $('.inputan').serialize();
                      $.playSound('sound/scan.mp3');
                      $.ajax({
                         type: "POST",
@@ -153,34 +163,147 @@ $( ".add" ).click(function() {
                         success: function(data) {
                             console.log(data);
                             if ($.trim(data) == "berhasil") {
+                              $("#hasilpresensi").load('read-office.php')
+                              $("#hasil").val("")
                                 $.toaster({
 
                                     // toast message
-                                    message : 'Presensi Berhasil', 
+                                    message : 'Presensi Berhasil',
 
                                     // toast title
-                                    title : 'Status', 
+                                    title : 'Status',
 
                                     // or 'success', 'info', 'warning', 'danger'
                                     priority : 'success'
-                                    
+
                                     });
-                            }else {
+                                  }else if ($.trim(data) == "sudah") {
+                                                                      $.toaster({
+
+                                            // toast message
+                                            message : 'Sudah Presensi',
+
+                                            // toast title
+                                            title : 'Status',
+
+                                            // or 'success', 'info', 'warning', 'danger'
+                                            priority : 'info'
+
+                                            });
+                                    }else if ($.trim(data) == "bukan") {
+                                                                      $.toaster({
+
+                                            // toast message
+                                            message : 'Anda salah gelombang, ini untuk gelombang <?=$_SESSION['hari']?> ',
+
+                                            // toast title
+                                            title : 'Status',
+
+                                            // or 'success', 'info', 'warning', 'danger'
+                                            priority : 'warning'
+
+                                            });
+                                    }else {
+                              $("#hasil").val("")
                                 $.toaster({
 
                                     // toast message
-                                    message : 'Presensi Gagal', 
+                                    message : 'Presensi Gagal',
 
                                     // toast title
-                                    title : 'Status', 
+                                    title : 'Status',
 
                                     // or 'success', 'info', 'warning', 'danger'
                                     priority : 'danger'
-                                    
+
                                     });
                             }
                         }
                      })
 });
+$(document).keypress(function(e) {
+  if (e.which == 13) {
+
+     var data = $('.inputan').serialize();
+                     $.playSound('sound/scan.mp3');
+                     $.ajax({
+                        type: "POST",
+                        url: 'create-office.php',
+                        data: data,
+                        success: function(data) {
+                            console.log(data);
+                            if ($.trim(data) == "berhasil") {
+                                $("#hasilpresensi").load('read-office.php')
+                                $.toaster({
+
+                                    // toast message
+                                    message : 'Presensi Berhasil',
+
+                                    // toast title
+                                    title : 'Status',
+
+                                    // or 'success', 'info', 'warning', 'danger'
+                                    priority : 'success'
+
+                                    });
+                            }else if ($.trim(data) == "salah") {
+                                    $.toaster({
+
+                                    // toast message
+                                    message : 'Divisi Salah',
+
+                                    // toast title
+                                    title : 'Status',
+
+                                    // or 'success', 'info', 'warning', 'danger'
+                                    priority : 'warning'
+
+                                    });
+                            } else if ($.trim(data) == "sudah") {
+                                                              $.toaster({
+
+                                    // toast message
+                                    message : 'Sudah Presensi',
+
+                                    // toast title
+                                    title : 'Status',
+
+                                    // or 'success', 'info', 'warning', 'danger'
+                                    priority : 'info'
+
+                                    });
+                            }else if ($.trim(data) == "bukan") {
+                                                              $.toaster({
+
+                                    // toast message
+                                    message : 'Anda salah gelombang, ini untuk gelombang <?=$_SESSION['hari']?> ',
+
+                                    // toast title
+                                    title : 'Status',
+
+                                    // or 'success', 'info', 'warning', 'danger'
+                                    priority : 'warning'
+
+                                    });
+                            }else {
+
+                                $.toaster({
+
+                                    // toast message
+                                    message : 'Presensi Gagal',
+
+                                    // toast title
+                                    title : 'Status',
+
+                                    // or 'success', 'info', 'warning', 'danger'
+                                    priority : 'danger'
+
+                                    });
+                            }
+                        }
+                     })
+                   }
+
+});
 </script>
-</html> 
+</html>
