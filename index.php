@@ -7,7 +7,6 @@ $countdb       = array();
 $countdata     = array();
 $countdigital  = array();
 for ($i=1; $i <=10 ; $i++) {
-  // code...
 $count_office = select_data_office($i);
 $count_db = select_data_db($i);
 $count_data = select_data_data($i);
@@ -148,13 +147,6 @@ options: {
         display: true,
         text: 'Total Peserta'
     },
-    scales: {
-        yAxes: [{
-            ticks: {
-                fixedStepSize: 1
-            }
-        }],
-    },
     legend: {
         display: true,
         labels: {
@@ -207,13 +199,6 @@ options: {
     title: {
         display: true,
         text: 'Total Peserta'
-    },
-    scales: {
-        yAxes: [{
-            ticks: {
-                fixedStepSize: 1
-            }
-        }],
     },
     legend: {
         display: true,
